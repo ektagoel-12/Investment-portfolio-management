@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* small custom utility for centered content */
+.app-container {
+  @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* body background + default font smoothing */
+html, body, #app {
+  height: 100%;
+}
+body {
+  @apply bg-blue-50 text-slate-800 antialiased;
+}
