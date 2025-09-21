@@ -1,85 +1,94 @@
 import { createStore } from 'vuex';
 import mockData from '../data/mock-data.json';
 import { v4 as uuidv4 } from 'uuid';
-import type { User, Portfolio } from '../types';
-import { loadUsers, saveUsers, savePortfolios } from '../services/storage';
+import type { User, Portfolio, PortfolioStatus } from '../types';
 
 export interface RootState {
   users: User[];
   portfolios: Portfolio[];
 }
 
+// helper to coerce status
+function toStatus(status: string): PortfolioStatus {
+  if (status === 'ACTIVE' || status === 'UPCOMING' || status === 'CLOSED') {
+    return status;
+  }
+  return 'UPCOMING';
+}
+
 const store = createStore({
-  state: {
-    // users: loadUsers().length ? loadUsers() : [
-    //   { id: uuidv4(), name: 'Asha Patel', email: 'asha@example.com', phone: '9876543210' },
-    //   { id: uuidv4(), name: 'Rajat Verma', email: 'rajat@example.com' }
-    // ],
-    users: loadUsers().length ? loadUsers() : mockData.users,
-    // portfolios: (loadPortfolios().length ? loadPortfolios() : []).map(p => ({
-    portfolios: mockData.portfolios.map(p => ({
+  state: (): RootState => ({
+    users: mockData.users as User[],
+
+    portfolios: (mockData.portfolios as any[]).map((p) => ({
       ...p,
+      id: p.id ?? uuidv4(),
+      status: toStatus(p.status),
       createdAt: p.createdAt ?? new Date().toISOString(),
       holdings: p.holdings ?? [],
       notes: p.notes ?? '',
       initialInvestment: p.initialInvestment ?? 0,
       startDate: p.startDate ?? ''
     }))
+  }),
 
-  },
   mutations: {
     addUser(state: RootState, user: User) {
       state.users.push(user);
-      saveUsers(state.users);
     },
     updateUser(state: RootState, user: User) {
-      const i = state.users.findIndex(u => u.id === user.id);
-      if (i !== -1) state.users.splice(i, 1, user);
-      saveUsers(state.users);
+      const idx = state.users.findIndex((u: User) => u.id === user.id);
+      if (idx !== -1) state.users.splice(idx, 1, user);
     },
     deleteUser(state: RootState, id: string) {
-      state.users = state.users.filter(u => u.id !== id);
-      saveUsers(state.users);
+      state.users = state.users.filter((u: User) => u.id !== id);
     },
-    addPortfolio(state: RootState, p: Portfolio) {
-      state.portfolios.push(p);
-      savePortfolios(state.portfolios);
+
+    addPortfolio(state: RootState, portfolio: Portfolio) {
+      state.portfolios.push(portfolio);
     },
-    updatePortfolio(state: RootState, p: Portfolio) {
-      const i = state.portfolios.findIndex(x => x.id === p.id);
-      if (i !== -1) state.portfolios.splice(i, 1, p);
-      savePortfolios(state.portfolios);
+    updatePortfolio(state: RootState, portfolio: Portfolio) {
+      const idx = state.portfolios.findIndex((p: Portfolio) => p.id === portfolio.id);
+      if (idx !== -1) state.portfolios.splice(idx, 1, portfolio);
     },
     deletePortfolio(state: RootState, id: string) {
-      state.portfolios = state.portfolios.filter(x => x.id !== id);
-      savePortfolios(state.portfolios);
+      state.portfolios = state.portfolios.filter((p: Portfolio) => p.id !== id);
     }
   },
+
   actions: {
-    createUser({ commit }:any, payload: Omit<User, 'id'>) {
+    createUser({ commit }: { commit: Function }, payload: Omit<User, 'id'>) {
       const user: User = { ...payload, id: uuidv4() };
       commit('addUser', user);
       return user;
     },
-    createPortfolio({ commit }:any, payload: Omit<Portfolio, 'id' | 'createdAt'>) {
-    const p: Portfolio = {
+    createPortfolio({ commit }: { commit: Function }, payload: Omit<Portfolio, 'id' | 'createdAt'>) {
+      const portfolio: Portfolio = {
         ...payload,
         id: uuidv4(),
+        status: payload.status as PortfolioStatus,
         createdAt: new Date().toISOString(),
         holdings: payload.holdings ?? [],
         initialInvestment: payload.initialInvestment ?? 0,
         startDate: payload.startDate ?? '',
         notes: payload.notes ?? ''
-      };      
-      commit('addPortfolio', p);
-      return p;
+      };
+      commit('addPortfolio', portfolio);
+      return portfolio;
     }
   },
+
   getters: {
-    getUserById: (state: RootState) => (id: string) => state.users.find(u => u.id === id),
-    getPortfolioById: (state: RootState) => (id: string) => state.portfolios.find(p => p.id === id),
-    portfoliosByStatus: (state: RootState) => (status: string) => state.portfolios.filter(p => p.status === status)
+    getUserById: (state: RootState) => (id: string) =>
+      state.users.find((u: User) => u.id === id),
+
+    getPortfolioById: (state: RootState) => (id: string) =>
+      state.portfolios.find((p: Portfolio) => p.id === id),
+
+    portfoliosByStatus: (state: RootState) => (status: PortfolioStatus) =>
+      state.portfolios.filter((p: Portfolio) => p.status === status)
   }
 });
 
+export type StoreType = ReturnType<typeof createStore>;
 export default store;

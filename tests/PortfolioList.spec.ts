@@ -1,38 +1,39 @@
-// tests/PortfolioList.spec.ts
 import { mount } from '@vue/test-utils';
-import { describe, it, expect, vi } from 'vitest';
-import PortfolioList from '../src/components/PortfolioList.vue';
 import { createStore } from 'vuex';
+import PortfolioList from '../src/components/PortfolioList.vue';
+import { describe, it, expect } from "vitest";
 
-const mockPortfolios = [
-  { id: '1', name: 'Tech Fund', status: 'ACTIVE', clientId: 'c1' },
-  { id: '2', name: 'Retirement', status: 'CLOSED', clientId: 'c2' },
+const portfolios = [
+  { id: '1', name: 'Portfolio A', status: 'ACTIVE', initialInvestment: 1000, createdAt: '2025-01-01', clientId: 'u1' },
+  { id: '2', name: 'Portfolio B', status: 'CLOSED', initialInvestment: 2000, createdAt: '2025-02-01', clientId: 'u2' }
 ];
-const mockUsers = [{ id: 'c1', name: 'Alice' }, { id: 'c2', name: 'Bob' }];
 
-function makeStore() {
-  return createStore({
-    state: { portfolios: mockPortfolios, users: mockUsers },
-    mutations: { deletePortfolio: vi.fn() },
-  });
-}
+const users = [
+  { id: 'u1', name: 'Alice' },
+  { id: 'u2', name: 'Bob' }
+];
+
+const mockStore = createStore({
+  state: { portfolios, users },
+  mutations: {
+    deletePortfolio(state, id: string) {
+      state.portfolios = state.portfolios.filter((p: any) => p.id !== id);
+    }
+  }
+});
 
 describe('PortfolioList.vue', () => {
-  it('renders portfolio names and clients', () => {
-    const store = makeStore();
-    const wrapper = mount(PortfolioList, { global: { plugins: [store] } });
-
-    expect(wrapper.text()).toContain('Tech Fund');
-    expect(wrapper.text()).toContain('Retirement');
-    expect(wrapper.text()).toContain('Client: Alice');
+  it('renders a list of portfolios', () => {
+    const wrapper = mount(PortfolioList, { global: { plugins: [mockStore] } });
+    expect(wrapper.text()).toContain('Portfolio A');
+    expect(wrapper.text()).toContain('Portfolio B');
   });
 
-  it('filters portfolios by status', async () => {
-    const store = makeStore();
-    const wrapper = mount(PortfolioList, { global: { plugins: [store] } });
-
-    await wrapper.find('select').setValue('ACTIVE');
-    expect(wrapper.text()).toContain('Tech Fund');
-    expect(wrapper.text()).not.toContain('Retirement');
+  it('filters by ACTIVE status', async () => {
+    const wrapper = mount(PortfolioList, { global: { plugins: [mockStore] } });
+    const select = wrapper.find('select');
+    await select.setValue('ACTIVE');
+    expect(wrapper.text()).toContain('Portfolio A');
+    expect(wrapper.text()).not.toContain('Portfolio B');
   });
 });

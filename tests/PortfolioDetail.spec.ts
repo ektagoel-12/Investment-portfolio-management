@@ -1,55 +1,93 @@
-// tests/PortfolioDetail.spec.ts
-import { mount } from '@vue/test-utils';
-import { describe, it, expect } from 'vitest';
-import PortfolioDetail from '../src/components/PortfolioDetail.vue';
-import { createStore } from 'vuex';
-import { createMemoryHistory, createRouter } from 'vue-router';
+import { mount } from "@vue/test-utils";
+import { createStore } from "vuex";
+import { createRouter, createWebHistory } from "vue-router";
+import PortfolioDetail from "../src/components/PortfolioDetail.vue";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const portfolio = {
-  id: '1',
-  name: 'Tech Fund',
-  status: 'ACTIVE',
-  clientId: 'c1',
-  createdAt: '2025-01-01T10:00:00Z',
-  initialInvestment: 50000,
-  holdings: [{ symbol: 'AAPL', quantity: 10, avgPrice: 150 }],
-};
-const users = [{ id: 'c1', name: 'Alice' }];
+// Mock Chart.js so canvas rendering doesn't break in tests
+vi.mock("chart.js/auto", () => ({
+  default: vi.fn().mockImplementation(() => ({
+    destroy: vi.fn()
+  }))
+}));
 
-function makeStore() {
-  return createStore({
-    state: { portfolios: [portfolio], users },
-    getters: { getPortfolioById: () => () => portfolio },
-  });
-}
-
+// Fake router setup
 const router = createRouter({
-  history: createMemoryHistory(),
-  routes: [{ path: '/portfolios/:id', component: PortfolioDetail }],
+  history: createWebHistory(),
+  routes: [{ path: "/portfolios/:id", component: PortfolioDetail }]
 });
 
-describe('PortfolioDetail.vue', () => {
-  it('renders portfolio details', async () => {
-    const store = makeStore();
-    router.push('/portfolios/1');
-    await router.isReady();
+// Sample data
+const portfolios = [
+  {
+    id: "p1",
+    name: "Tech Portfolio",
+    status: "ACTIVE",
+    createdAt: "2025-01-01T00:00:00Z",
+    initialInvestment: 5000,
+    clientId: "u1",
+    holdings: [
+      { symbol: "AAPL", quantity: 10, avgPrice: 150 },
+      { symbol: "MSFT", quantity: 5, avgPrice: 200 }
+    ],
+    notes: "Long-term growth focus."
+  }
+];
 
-    const wrapper = mount(PortfolioDetail, { global: { plugins: [store, router] } });
+const users = [{ id: "u1", name: "Alice" }];
 
-    expect(wrapper.text()).toContain('Tech Fund');
-    expect(wrapper.text()).toContain('ACTIVE');
-    expect(wrapper.text()).toContain('Alice');
-    expect(wrapper.text()).toContain('₹ 50,000');
+const createMockStore = () =>
+  createStore({
+    state: { portfolios, users },
+    getters: {
+      getPortfolioById: (state) => (id: string) =>
+        state.portfolios.find((p) => p.id === id)
+    }
   });
 
-  it('shows holdings table', async () => {
-    const store = makeStore();
-    router.push('/portfolios/1');
+beforeEach(async () => {
+  router.push("/");
+  await router.isReady();
+});
+
+describe("PortfolioDetail.vue", () => {
+  it("renders portfolio details with client name", async () => {
+    const store = createMockStore();
+    await router.push("/portfolios/p1");
     await router.isReady();
 
-    const wrapper = mount(PortfolioDetail, { global: { plugins: [store, router] } });
+    const wrapper = mount(PortfolioDetail, {
+      global: { plugins: [store, router] }
+    });
 
-    expect(wrapper.find('table').text()).toContain('AAPL');
-    expect(wrapper.find('table').text()).toContain('10');
+    expect(wrapper.text()).toContain("Tech Portfolio");
+    expect(wrapper.text()).toContain("Alice");
+    expect(wrapper.text()).toContain("ACTIVE");
+    expect(wrapper.text()).toContain("Initial Investment");
+    expect(wrapper.text()).toContain("₹ 5,000");
+  });
+
+  it("renders holdings table and summary correctly", async () => {
+    const store = createMockStore();
+    await router.push("/portfolios/p1");
+    await router.isReady();
+
+    const wrapper = mount(PortfolioDetail, {
+      global: { plugins: [store, router] }
+    });
+
+    // Holdings rows
+    expect(wrapper.text()).toContain("AAPL");
+    expect(wrapper.text()).toContain("MSFT");
+
+    // Quantity & summary
+    expect(wrapper.text()).toContain("10");
+    expect(wrapper.text()).toContain("5");
+    expect(wrapper.text()).toContain("Total Quantity");
+    expect(wrapper.text()).toContain("15"); // 10 + 5
+    expect(wrapper.text()).toContain("Total Investment");
+
+    // Total investment: (10*150) + (5*200) = 1500 + 1000 = 2500
+    expect(wrapper.text()).toContain("2,500");
   });
 });

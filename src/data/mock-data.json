@@ -1,49 +1,152 @@
 {
   "users": [
-    { "id": "u1", "name": "Alice Johnson", "email": "alice@example.com" },
-    { "id": "u2", "name": "Bob Smith", "email": "bob@example.com" },
-    { "id": "u3", "name": "Charlie Brown", "email": "charlie@example.com" }
+    { "id": "u1", "name": "Aarav Sharma", "email": "aarav.sharma@gmail.com" },
+    { "id": "u2", "name": "Priya Verma", "email": "priya.verma@gmail.com" },
+    { "id": "u3", "name": "Rohan Gupta", "email": "rohan.gupta@gmail.com" },
+    { "id": "u4", "name": "Ananya Iyer", "email": "ananya.iyer@gmail.com" },
+    { "id": "u5", "name": "Vikram Nair", "email": "vikram.nair@gmail.com" },
+    { "id": "u6", "name": "Meera Kapoor", "email": "meera.kapoor@gmail.com" },
+    { "id": "u7", "name": "Karan Malhotra", "email": "karan.malhotra@gmail.com" },
+    { "id": "u8", "name": "Neha Reddy", "email": "neha.reddy@gmail.com" },
+    { "id": "u9", "name": "Aditya Mehta", "email": "aditya.mehta@gmail.com" },
+    { "id": "u10", "name": "Sneha Joshi", "email": "sneha.joshi@gmail.com" }
   ],
   "portfolios": [
     {
       "id": "p1",
-      "name": "Growth Fund",
+      "name": "Bluechip Growth",
       "status": "ACTIVE",
       "clientId": "u1",
-      "initialInvestment": 100000,
-      "startDate": "2025-01-15",
-      "createdAt": "2025-01-10T12:00:00",
-      "notes": "Focus on high-growth tech stocks for aggressive returns.",
+      "initialInvestment": 350000,
+      "startDate": "2024-04-15",
+      "createdAt": "2024-04-01T10:00:00",
+      "notes": "Focus on large-cap Indian companies for steady long-term growth.",
       "holdings": [
-        { "symbol": "AAPL", "quantity": 10, "avgPrice": 150 },
-        { "symbol": "MSFT", "quantity": 5, "avgPrice": 300 },
-        { "symbol": "TSLA", "quantity": 2, "avgPrice": 700 }
+        { "symbol": "RELIANCE", "quantity": 20, "avgPrice": 2450 },
+        { "symbol": "TCS", "quantity": 15, "avgPrice": 3400 },
+        { "symbol": "INFY", "quantity": 10, "avgPrice": 1550 }
       ]
     },
     {
       "id": "p2",
-      "name": "Retirement Plan",
+      "name": "Retirement SIP Plan",
       "status": "UPCOMING",
       "clientId": "u2",
-      "initialInvestment": 50000,
-      "startDate": "2025-09-15",
-      "createdAt": "2025-09-21T13:36:58",
-      "notes": "Balanced portfolio with safe, long-term investments.",
+      "initialInvestment": 120000,
+      "startDate": "2025-02-10",
+      "createdAt": "2024-12-20T12:00:00",
+      "notes": "Long-term retirement corpus built via SIP in IT and Banking sector.",
       "holdings": []
     },
     {
       "id": "p3",
-      "name": "Dividend Strategy",
+      "name": "Dividend FMCG",
       "status": "CLOSED",
       "clientId": "u3",
-      "initialInvestment": 75000,
-      "startDate": "2024-03-01",
-      "createdAt": "2024-02-20T09:15:00",
-      "notes": "Investments in high-dividend companies for steady income.",
+      "initialInvestment": 80000,
+      "startDate": "2023-03-05",
+      "createdAt": "2023-02-25T09:30:00",
+      "notes": "High-dividend yield stocks in FMCG and consumer sector.",
       "holdings": [
-        { "symbol": "JNJ", "quantity": 8, "avgPrice": 160 },
-        { "symbol": "KO", "quantity": 15, "avgPrice": 55 }
+        { "symbol": "HUL", "quantity": 25, "avgPrice": 2100 },
+        { "symbol": "ASIANPAINT", "quantity": 15, "avgPrice": 3100 }
       ]
+    },
+    {
+      "id": "p4",
+      "name": "Tech Innovation",
+      "status": "ACTIVE",
+      "clientId": "u4",
+      "initialInvestment": 200000,
+      "startDate": "2024-08-12",
+      "createdAt": "2024-08-01T14:00:00",
+      "notes": "IT-focused portfolio for long-term capital appreciation.",
+      "holdings": [
+        { "symbol": "WIPRO", "quantity": 30, "avgPrice": 420 },
+        { "symbol": "INFY", "quantity": 18, "avgPrice": 1500 },
+        { "symbol": "TCS", "quantity": 10, "avgPrice": 3350 }
+      ]
+    },
+    {
+      "id": "p5",
+      "name": "Banking Leaders",
+      "status": "ACTIVE",
+      "clientId": "u5",
+      "initialInvestment": 500000,
+      "startDate": "2025-01-25",
+      "createdAt": "2025-01-15T11:00:00",
+      "notes": "Exposure to top Indian private sector banks.",
+      "holdings": [
+        { "symbol": "HDFCBANK", "quantity": 25, "avgPrice": 1600 },
+        { "symbol": "ICICIBANK", "quantity": 40, "avgPrice": 950 },
+        { "symbol": "SBIN", "quantity": 35, "avgPrice": 580 }
+      ]
+    },
+    {
+      "id": "p6",
+      "name": "NextGen Startups",
+      "status": "UPCOMING",
+      "clientId": "u6",
+      "initialInvestment": 150000,
+      "startDate": "2025-10-01",
+      "createdAt": "2025-09-10T15:30:00",
+      "notes": "High-risk investments planned in upcoming IPOs and startups.",
+      "holdings": []
+    },
+    {
+      "id": "p7",
+      "name": "Balanced Equity",
+      "status": "ACTIVE",
+      "clientId": "u7",
+      "initialInvestment": 180000,
+      "startDate": "2023-09-15",
+      "createdAt": "2023-09-01T10:15:00",
+      "notes": "Mix of large-cap, mid-cap and FMCG companies.",
+      "holdings": [
+        { "symbol": "ASIANPAINT", "quantity": 10, "avgPrice": 3000 },
+        { "symbol": "HUL", "quantity": 12, "avgPrice": 2050 },
+        { "symbol": "RELIANCE", "quantity": 8, "avgPrice": 2400 }
+      ]
+    },
+    {
+      "id": "p8",
+      "name": "Entertainment & Digital",
+      "status": "CLOSED",
+      "clientId": "u8",
+      "initialInvestment": 95000,
+      "startDate": "2023-06-12",
+      "createdAt": "2023-05-25T09:00:00",
+      "notes": "Media and digital companies with high growth potential.",
+      "holdings": [
+        { "symbol": "ZEE", "quantity": 50, "avgPrice": 200 },
+        { "symbol": "SUNTV", "quantity": 30, "avgPrice": 450 }
+      ]
+    },
+    {
+      "id": "p9",
+      "name": "Healthcare & Pharma",
+      "status": "ACTIVE",
+      "clientId": "u9",
+      "initialInvestment": 220000,
+      "startDate": "2024-02-18",
+      "createdAt": "2024-02-01T11:45:00",
+      "notes": "Pharma and healthcare companies for defensive investing.",
+      "holdings": [
+        { "symbol": "SUNPHARMA", "quantity": 20, "avgPrice": 950 },
+        { "symbol": "DRREDDY", "quantity": 10, "avgPrice": 4800 },
+        { "symbol": "CIPLA", "quantity": 15, "avgPrice": 1100 }
+      ]
+    },
+    {
+      "id": "p10",
+      "name": "Future India Fund",
+      "status": "UPCOMING",
+      "clientId": "u10",
+      "initialInvestment": 300000,
+      "startDate": "2025-12-10",
+      "createdAt": "2025-09-20T10:00:00",
+      "notes": "Planned investments in EV, renewable energy, and fintech.",
+      "holdings": []
     }
   ]
 }

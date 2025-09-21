@@ -1,45 +1,83 @@
-// tests/UserForm.spec.ts
-import { mount } from '@vue/test-utils';
-import { describe, it, expect, vi } from 'vitest';
-import UserForm from '../src/components/UserForm.vue';
-import { createStore } from 'vuex';
-import { createRouter, createMemoryHistory } from 'vue-router';
+import { mount } from "@vue/test-utils";
+import { createStore } from "vuex";
+import { createRouter, createWebHistory } from "vue-router";
+import UserForm from "../src/components/UserForm.vue";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-function makeStore() {
-  return createStore({
-    getters: { getUserById: () => () => null },
-    state: { users: [] },
-    actions: { createUser: vi.fn() },
-    mutations: { updateUser: vi.fn() },
+const createMockStore = () =>
+  createStore({
+    state: {
+      users: [
+        { id: "u1", name: "Alice", email: "alice@test.com", phone: "1234567890" }
+      ]
+    },
+    getters: {
+      getUserById: (state) => (id: string) =>
+        state.users.find((u) => u.id === id)
+    },
+    actions: {
+      createUser: vi.fn()
+    },
+    mutations: {
+      updateUser: vi.fn()
+    }
   });
-}
 
 const router = createRouter({
-  history: createMemoryHistory(),
-  routes: [{ path: '/users', component: { template: '<div>Users</div>' } }],
+  history: createWebHistory(),
+  routes: [{ path: "/users/:id?", component: UserForm }]
 });
 
-describe('UserForm.vue', () => {
-  it('renders form fields', () => {
-    const store = makeStore();
-    const wrapper = mount(UserForm, { global: { plugins: [store, router] } });
+beforeEach(async () => {
+  router.push("/");
+  await router.isReady();
+});
 
-    expect(wrapper.find('input#name').exists()).toBe(true);
-    expect(wrapper.find('input#email').exists()).toBe(true);
-    expect(wrapper.find('input#phone').exists()).toBe(true);
-  });
-
-  it('submits new user', async () => {
-    const store = makeStore();
-    router.push('/users/new');
+describe("UserForm.vue", () => {
+  it("renders new client form and submits", async () => {
+    const store = createMockStore();
+    await router.push("/users"); // no id → create mode
     await router.isReady();
 
-    const wrapper = mount(UserForm, { global: { plugins: [store, router] } });
+    const wrapper = mount(UserForm, {
+      global: { plugins: [store, router] }
+    });
 
-    await wrapper.find('#name').setValue('Alice');
-    await wrapper.find('#email').setValue('alice@example.com');
-    await wrapper.find('form').trigger('submit.prevent');
+    // Fill in form
+    await wrapper.find("input#name").setValue("Bob");
+    await wrapper.find("input#email").setValue("bob@test.com");
+    await wrapper.find("input#phone").setValue("+91 98765 43210");
 
-    expect(store._actions.createUser).toHaveLength(1);
+    await wrapper.find("form").trigger("submit.prevent");
+
+    expect(store.dispatch).toHaveBeenCalledWith("createUser", {
+      name: "Bob",
+      email: "bob@test.com",
+      phone: "+91 98765 43210"
+    });
+  });
+
+  it("prefills values in edit mode and updates user", async () => {
+    const store = createMockStore();
+    await router.push("/users/u1"); // edit mode
+    await router.isReady();
+
+    const wrapper = mount(UserForm, {
+      global: { plugins: [store, router] }
+    });
+
+    const nameInput = wrapper.find("input#name");
+    expect((nameInput.element as HTMLInputElement).value).toBe("Alice");
+
+    // Change name
+    await nameInput.setValue("Alice Updated");
+    await wrapper.find("form").trigger("submit.prevent");
+
+    expect(store.commit).toHaveBeenCalledWith("updateUser", {
+      id: "u1",
+      name: "Alice Updated",
+      email: "alice@test.com",
+      phone: "1234567890"
+    });
   });
 });
