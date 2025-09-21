@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Home from '../components/Home.vue'
 import UserList from '../components/UserList.vue';
 import UserForm from '../components/UserForm.vue';
 import PortfolioList from '../components/PortfolioList.vue';
@@ -6,7 +7,7 @@ import PortfolioForm from '../components/PortfolioForm.vue';
 import PortfolioDetail from '../components/PortfolioDetail.vue';
 
 const routes = [
-  { path: '/', redirect: '/portfolios' },
+  { path: '/', component: Home },
   { path: '/users', component: UserList },
   { path: '/users/new', component: UserForm },
   { path: '/users/:id/edit', component: UserForm, props: true },
