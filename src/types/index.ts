@@ -22,4 +22,6 @@ export type Portfolio = {
   holdings: Holding[]; // list of holdings
   createdAt: string;
   notes?: string;
+  initialInvestment: number;
+  startDate: string;
 };

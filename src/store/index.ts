@@ -14,7 +14,15 @@ const store = createStore({
       { id: uuidv4(), name: 'Asha Patel', email: 'asha@example.com', phone: '9876543210' },
       { id: uuidv4(), name: 'Rajat Verma', email: 'rajat@example.com' }
     ],
-    portfolios: loadPortfolios().length ? loadPortfolios() : []
+    portfolios: (loadPortfolios().length ? loadPortfolios() : []).map(p => ({
+      ...p,
+      createdAt: p.createdAt ?? new Date().toISOString(),
+      holdings: p.holdings ?? [],
+      notes: p.notes ?? '',
+      initialInvestment: p.initialInvestment ?? 0,
+      startDate: p.startDate ?? ''
+    }))
+
   },
   mutations: {
     addUser(state: RootState, user: User) {
@@ -51,7 +59,15 @@ const store = createStore({
       return user;
     },
     createPortfolio({ commit }:any, payload: Omit<Portfolio, 'id' | 'createdAt'>) {
-      const p: Portfolio = { ...payload, id: uuidv4(), createdAt: new Date().toISOString() };
+    const p: Portfolio = {
+        ...payload,
+        id: uuidv4(),
+        createdAt: new Date().toISOString(),
+        holdings: payload.holdings ?? [],
+        initialInvestment: payload.initialInvestment ?? 0,
+        startDate: payload.startDate ?? '',
+        notes: payload.notes ?? ''
+      };      
       commit('addPortfolio', p);
       return p;
     }

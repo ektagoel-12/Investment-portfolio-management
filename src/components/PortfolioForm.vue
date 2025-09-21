@@ -67,13 +67,13 @@
                 type="number"
                 step="0.01"
                 min="0"
-                placeholder="10000"
                 v-bind="componentField"
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         </FormField>
+
 
         <!-- Start Date -->
         <FormField name="startDate" v-slot="{ componentField }">
@@ -146,7 +146,7 @@ const schema = toTypedSchema(
     name: z.string().min(3, "Name too short"),
     status: z.enum(["UPCOMING", "ACTIVE", "CLOSED"]),
     clientId: z.string().min(1, "Please select a client"),
-    initialInvestment: z.string().regex(/^\d+(\.\d+)?$/, "Enter a valid number"),
+    initialInvestment: z.number().min(0, "Enter a valid number"),
     startDate: z.string().nonempty("Start date is required"),
     notes: z.string().optional(),
   })
@@ -158,7 +158,7 @@ const { handleSubmit, setValues, isSubmitting } = useForm({
     name: "",
     status: "UPCOMING",
     clientId: "",
-    initialInvestment: "",
+    initialInvestment: 0,
     startDate: "",
     notes: "",
   },
@@ -175,7 +175,7 @@ onMounted(() => {
         name: String(portfolio.name ?? ""),
         status: portfolio.status,
         clientId: String(portfolio.clientId ?? ""),
-        initialInvestment: String(portfolio.initialInvestment ?? 0),
+        initialInvestment: Number(portfolio.initialInvestment ?? 0),
         startDate: portfolio.createdAt?.slice(0, 10) ?? "",
         notes: String(portfolio.notes ?? ""),
       });
