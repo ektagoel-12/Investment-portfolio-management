@@ -1,11 +1,23 @@
-<template>
-  <label :for="forId" class="block text-sm font-medium text-slate-700">
-    <slot />
-  </label>
-</template>
+<script lang="ts" setup>
+import type { LabelProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { cn } from "@/lib/utils"
+import { Label } from '@/components/ui/label'
+import { useFormField } from "./useFormField"
 
-<script setup lang="ts">
-import { defineProps } from 'vue';
-const props = defineProps<{ for?: string }>();
-const forId = props.for ?? undefined;
+const props = defineProps<LabelProps & { class?: HTMLAttributes["class"] }>()
+
+const { error, formItemId } = useFormField()
 </script>
+
+<template>
+  <Label
+    :class="cn(
+      error && 'text-destructive',
+      props.class,
+    )"
+    :for="formItemId"
+  >
+    <slot />
+  </Label>
+</template>

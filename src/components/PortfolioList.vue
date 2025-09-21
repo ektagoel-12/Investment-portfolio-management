@@ -9,7 +9,7 @@
           <option value="ACTIVE">ACTIVE</option>
           <option value="CLOSED">CLOSED</option>
         </select>
-        <router-link to="/portfolios/new"><BaseButton>New Portfolio</BaseButton></router-link>
+        <router-link to="/portfolios/new"><Button>New Portfolio</Button></router-link>
       </div>
     </div>
 
@@ -33,9 +33,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
-import Card from '../components/ui/Card.vue';
-import BaseButton from '../components/ui/BaseButton.vue';
+import {Card} from '../components/ui/card/index';
+// import {Button} from '../components/ui/button';
 import type { Portfolio, PortfolioStatus, User } from '../types';
+import Button from './ui/button/Button.vue';
 
 const store = useStore();
 const filter = ref<'' | PortfolioStatus>('');

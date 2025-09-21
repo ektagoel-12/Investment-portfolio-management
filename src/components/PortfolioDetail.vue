@@ -46,7 +46,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import Card from '../components/ui/Card.vue';
+import {Card} from '../components/ui/card/index';
 
 const route = useRoute();
 const store = useStore();

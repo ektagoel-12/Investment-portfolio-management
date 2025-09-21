@@ -1,18 +1,16 @@
-<template>
-  <p v-if="error && error !== ''" class="text-sm text-red-600 mt-1" role="alert">
-    {{ error }}
-  </p>
-</template>
+<script lang="ts" setup>
+import { ErrorMessage } from "vee-validate"
+import { toValue } from "vue"
+import { useFormField } from "./useFormField"
 
-<script setup lang="ts">
-import { inject, computed } from 'vue';
-
-// fieldError is a reactive ref provided by the nearest FormField
-const fieldError = inject<any>('fieldError', null);
-
-const error = computed(() => {
-  if (!fieldError) return '';
-  // fieldError may be a ref or a string
-  return typeof fieldError === 'function' ? fieldError() : fieldError.value ?? '';
-});
+const { name, formMessageId } = useFormField()
 </script>
+
+<template>
+  <ErrorMessage
+    :id="formMessageId"
+    as="p"
+    :name="toValue(name)"
+    class="text-[0.8rem] font-medium text-destructive"
+  />
+</template>

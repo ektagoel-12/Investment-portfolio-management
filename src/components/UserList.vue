@@ -37,8 +37,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import Card from '../components/ui/Card.vue';
-import BaseButton from '../components/ui/BaseButton.vue';
+import {Card} from '../components/ui/card/index';
+// import Button from '../components/ui/button';
 
 const store = useStore();
 const users = computed(() => (store.state.users || []));

@@ -110,7 +110,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import * as z from 'zod';
 
 // UI primitives
-import Card from '../components/ui/Card.vue';
+import {Card} from '../components/ui/card/index';
 import {
   FormField,
   FormItem,
