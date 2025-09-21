@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": false,
-    "verbatimModuleSyntax": false,
+    // "verbatimModuleSyntax": false,
     "esModuleInterop": true,
     "strict": false,
     "noImplicitAny": false,
