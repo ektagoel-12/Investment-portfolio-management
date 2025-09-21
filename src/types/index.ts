@@ -24,4 +24,5 @@ export type Portfolio = {
   notes?: string;
   initialInvestment: number;
   startDate: string;
+  
 };

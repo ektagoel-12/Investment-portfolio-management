@@ -89,18 +89,6 @@
 </template>
 
 <script setup lang="ts">
-/**
- * UserForm.vue
- * - Uses vee-validate + zod for typed validation
- * - Works in create and edit modes
- *
- * Ensure these exist:
- * - Card at '@/components/ui/Card.vue'
- * - shadcn form primitives at '@/components/ui/form'
- *
- * Install libs:
- * npm i vee-validate zod @vee-validate/zod
- */
 
 import { onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';

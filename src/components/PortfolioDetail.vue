@@ -6,7 +6,7 @@
       <!-- Header -->
       <div class="flex justify-between items-start mb-4">
         <div>
-          <h2 class="text-2xl font-semibold">{{ portfolio.name }}</h2>
+          <h2 class="text-2xl font-bold text-slate-800">{{ portfolio.name }}</h2>
           <div class="text-sm text-slate-500 mt-1">
             Status: {{ portfolio.status }} • Created: {{ formattedDate }}
           </div>
