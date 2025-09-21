@@ -1,30 +1,46 @@
 <template>
   <div class="max-w-2xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
-      <h1 id="client-form" class="text-2xl font-semibold text-slate-900">
-        {{ isEdit ? 'Edit Client' : 'New Client' }}
+    <!-- Header -->
+    <div class="flex flex-col items-start mb-8">
+      <h1
+        id="client-form"
+        class="text-3xl font-bold text-slate-900 tracking-tight"
+      >
+        {{ isEdit ? '✏️ Edit Client' : '➕ Add New Client' }}
       </h1>
+      <p class="text-slate-500 text-sm mt-1">
+        Fill in the details below to manage your client’s information.
+      </p>
     </div>
 
-    <Card>
-      <!-- use a native form but driven by vee-validate composition -->
-      <form @submit.prevent="onSubmit" novalidate class="space-y-5" aria-labelledby="client-form">
+    <!-- Form Card -->
+    <Card
+      class="p-8 rounded-xl shadow-lg bg-gradient-to-br from-white via-blue-50 to-blue-100"
+    >
+      <form
+        @submit.prevent="onSubmit"
+        novalidate
+        class="space-y-6"
+        aria-labelledby="client-form"
+      >
         <!-- Name -->
         <FormField name="name" v-slot="{ componentField }">
           <FormItem>
-            <FormLabel for="name">Full name</FormLabel>
+            <FormLabel for="name">Full Name</FormLabel>
             <FormControl>
               <input
                 v-bind="componentField"
                 id="name"
                 type="text"
-                aria-required="true"
-                aria-invalid="false"
                 placeholder="e.g. Asha Patel"
-                class="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-400"
+                class="w-full p-3 rounded-md border transition-all 
+                       focus:outline-none focus:ring-2 focus:ring-blue-400 
+                       hover:border-blue-400"
               />
             </FormControl>
-            <FormDescription>Enter the client's full name (required).</FormDescription>
+            <FormDescription>
+              Enter the client’s full name (required).
+            </FormDescription>
             <FormMessage class="text-sm text-red-600" />
           </FormItem>
         </FormField>
@@ -38,12 +54,15 @@
                 v-bind="componentField"
                 id="email"
                 type="email"
-                aria-required="true"
                 placeholder="ashapatel@example.com"
-                class="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-400"
+                class="w-full p-3 rounded-md border transition-all 
+                       focus:outline-none focus:ring-2 focus:ring-blue-400 
+                       hover:border-blue-400"
               />
             </FormControl>
-            <FormDescription>We'll use this to send notifications and statements.</FormDescription>
+            <FormDescription>
+              We’ll use this to send notifications and statements.
+            </FormDescription>
             <FormMessage class="text-sm text-red-600" />
           </FormItem>
         </FormField>
@@ -59,7 +78,9 @@
                 type="tel"
                 placeholder="+91 98765 43210"
                 inputmode="tel"
-                class="w-full p-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-400"
+                class="w-full p-3 rounded-md border transition-all 
+                       focus:outline-none focus:ring-2 focus:ring-blue-400 
+                       hover:border-blue-400"
               />
             </FormControl>
             <FormDescription>Optional — helpful for quick contact.</FormDescription>
@@ -68,18 +89,25 @@
         </FormField>
 
         <!-- Actions -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-4 pt-2">
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+            class="px-6 py-3 rounded-md font-semibold text-white 
+                   bg-blue-600 hover:bg-blue-700 focus:ring-2 
+                   focus:ring-blue-500 cursor-pointer transition-all"
             aria-live="polite"
           >
             <span v-if="isSubmitting" aria-hidden="true">Saving…</span>
             <span v-else>{{ isEdit ? 'Update Client' : 'Create Client' }}</span>
           </button>
 
-          <router-link to="/users" class="inline-flex items-center px-4 py-2 rounded-2xl border text-slate-700 bg-white">
+          <router-link
+            to="/users"
+            class="px-6 py-3 rounded-md border font-medium 
+                   text-slate-700 bg-white hover:bg-slate-100 
+                   cursor-pointer transition-all"
+          >
             Cancel
           </router-link>
         </div>
@@ -89,7 +117,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
@@ -97,8 +124,8 @@ import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import * as z from 'zod';
 
-// UI primitives
-import {Card} from '../components/ui/card/index';
+// UI components
+import { Card } from '../components/ui/card/index';
 import {
   FormField,
   FormItem,
@@ -108,7 +135,7 @@ import {
   FormMessage
 } from '../components/ui/form/';
 
-// zod schema
+// Zod schema for validation
 const userSchema = toTypedSchema(
   z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -121,9 +148,7 @@ const userSchema = toTypedSchema(
   })
 );
 
-// type UserFormValues = z.output<typeof userSchema>;
-
-// vee-validate setup
+// vee-validate form
 const { handleSubmit, setValues, isSubmitting } = useForm({
   validationSchema: userSchema,
   initialValues: { name: '', email: '', phone: undefined }
@@ -136,6 +161,7 @@ const router = useRouter();
 const id = route.params.id as string | undefined;
 const isEdit = computed(() => !!id);
 
+// Prefill values if editing
 onMounted(() => {
   if (isEdit.value && id) {
     const user = store.getters.getUserById(id);
@@ -151,12 +177,12 @@ onMounted(() => {
   }
 });
 
-// submit handler
+// Form submit handler
 const onSubmit = handleSubmit(async (values) => {
   if (isEdit.value && id) {
     store.commit('updateUser', { id, ...values });
   } else {
-    await store.dispatch('createUser', { name: values.name, email: values.email, phone: values.phone });
+    await store.dispatch('createUser', values);
   }
   router.push('/users');
 });
