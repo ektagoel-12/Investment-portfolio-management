@@ -4,7 +4,7 @@
 
     <Card v-else>
       <!-- Header -->
-      <div class="flex justify-between items-start">
+      <div class="flex justify-between items-start mb-4">
         <div>
           <h2 class="text-2xl font-semibold">{{ portfolio.name }}</h2>
           <div class="text-sm text-slate-500 mt-1">
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div>
-          <router-link :to="`/portfolios/${portfolio.id}/edit`" class="text-blue-600">
+          <router-link :to="`/portfolios/${portfolio.id}/edit`" class="text-blue-600 hover:underline text-sm">
             Edit
           </router-link>
         </div>

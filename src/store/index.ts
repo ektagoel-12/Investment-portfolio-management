@@ -1,7 +1,8 @@
 import { createStore } from 'vuex';
+import mockData from '../data/mock-data.json';
 import { v4 as uuidv4 } from 'uuid';
 import type { User, Portfolio } from '../types';
-import { loadUsers, saveUsers, loadPortfolios, savePortfolios } from '../services/storage';
+import { loadUsers, saveUsers, savePortfolios } from '../services/storage';
 
 export interface RootState {
   users: User[];
@@ -10,11 +11,13 @@ export interface RootState {
 
 const store = createStore({
   state: {
-    users: loadUsers().length ? loadUsers() : [
-      { id: uuidv4(), name: 'Asha Patel', email: 'asha@example.com', phone: '9876543210' },
-      { id: uuidv4(), name: 'Rajat Verma', email: 'rajat@example.com' }
-    ],
-    portfolios: (loadPortfolios().length ? loadPortfolios() : []).map(p => ({
+    // users: loadUsers().length ? loadUsers() : [
+    //   { id: uuidv4(), name: 'Asha Patel', email: 'asha@example.com', phone: '9876543210' },
+    //   { id: uuidv4(), name: 'Rajat Verma', email: 'rajat@example.com' }
+    // ],
+    users: loadUsers().length ? loadUsers() : mockData.users,
+    // portfolios: (loadPortfolios().length ? loadPortfolios() : []).map(p => ({
+    portfolios: mockData.portfolios.map(p => ({
       ...p,
       createdAt: p.createdAt ?? new Date().toISOString(),
       holdings: p.holdings ?? [],
