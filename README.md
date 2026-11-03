@@ -1,7 +1,9 @@
-
 # 💼 WealthTrack 
 
 WealthTrack is a Vue.js-based Investment Portfolio Management System that enables seamless management of clients and their portfolios. It eliminates data loss, avoids miscommunication, and improves client engagement by providing an intuitive interface to manage users and their investments.
+
+https://github.com/user-attachments/assets/7d4b446a-38ae-4987-bca5-24137523000e
+
 
 ---
 
